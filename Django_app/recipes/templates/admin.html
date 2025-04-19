@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --accent-color: #3498db;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-color);
+        }
+        
+        .recipe-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        
+        .recipe-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .recipe-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .recipe-image {
+            width: 100px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-right: 20px;
+        }
+        
+        .recipe-name {
+            flex-grow: 1;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .btn-edit {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .btn-edit:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-delete {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+        
+        .btn-back:hover {
+            background-color: #d5dbdb;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 8px;
+            width: 50%;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .close {
+            float: right;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        
+        .form-actions {
+            text-align: right;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <h2>Custom Admin Panel</h2>
+        
+        <ul class="recipe-list">
+            {% for recipe in recipes %}
+                <li class="recipe-item">
+                    <img src="{{ recipe.image.url }}" alt="{{ recipe.name }}" class="recipe-image">
+                    <span class="recipe-name">{{ recipe.name }}</span>
+                    <div class="action-buttons">
+                        <button class="btn btn-edit" onclick="openEditModal({{ recipe.id }})">Edit</button>
+                        <form action="{% url 'delete_recipe' recipe.id %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-delete">Delete</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        
+        <a href="{% url 'homepage' %}" class="btn btn-back">Back to Home</a>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>Edit Recipe</h3>
+            <form id="editForm" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" id="recipeId" name="recipe_id">
+                <div class="form-group">
+                    <label for="recipeName">Recipe Name</label>
+                    <input type="text" id="recipeName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="recipeImage">Recipe Image</label>
+                    <input type="file" id="recipeImage" name="image" accept="image/*">
+                    <small>Leave empty to keep current image</small>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-back" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-edit">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openEditModal(recipeId) {
+            const modal = document.getElementById('editModal');
+            document.getElementById('recipeId').value = recipeId;
+
+            fetch(`/get_recipe_data/${recipeId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('recipeName').value = data.name;
+                    modal.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    modal.style.display = 'block';
+                });
+        }
+        
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+n
+        document.getElementById('editForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const recipeId = document.getElementById('recipeId').value;
+            
+            fetch(`/update_recipe/${recipeId}/`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    location.reload(); 
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

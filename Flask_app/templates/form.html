@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fill the Form</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container no-float">
+    <div class="card glass">
+      <h2>Enter Your Details ✨</h2>
+      <form method="POST" action="{{ url_for('greet') }}">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="number" name="age" placeholder="Your Age" required>
+        <button type="submit" class="button">Submit</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

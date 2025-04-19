@@ -1,0 +1,65 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    perspective: 1000px;
+    overflow: hidden;
+  }
+  
+  .container {
+    transform: rotateY(10deg) rotateX(5deg);
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotateY(10deg); }
+    50% { transform: translateY(-20px) rotateY(-10deg); }
+  }
+  
+  .card.glass {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 40px 60px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    backdrop-filter: blur(10px);
+    color: white;
+    text-align: center;
+    transform: rotateY(10deg);
+    transition: transform 0.3s ease;
+  }
+  
+  .card.glass:hover {
+    transform: rotateY(0deg) scale(1.05);
+  }
+  
+  .button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 25px;
+    background: #fff;
+    color: #333;
+    font-weight: bold;
+    border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+  }
+  
+  .button:hover {
+    background: #333;
+    color: #fff;
+  }
+  
+  .no-float {
+    transform: none;
+    animation: none;
+  }

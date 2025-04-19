@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World!</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <div class="card glass">
+      <h1>Hello, World! 🌍</h1>
+      <a href="{{ url_for('form') }}" class="button">Fill the Form</a>
+    </div>
+  </div>
+</body>
+</html>
