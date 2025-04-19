@@ -89,7 +89,7 @@ Follow the steps below to run both the Flask and Django applications using **Jen
 - Choose **Git** as the SCM.
 - Enter your repository URL:  
   `https://github.com/SRCEM-AIML/C68_VaibhavsinghMohane_A2.git`
-- Set the branch to `main` (or `mohanews` if using that branch).
+- Set the branch to `main`.
 - Jenkins will automatically use the `Jenkinsfile` from your repo.
 
 ---
@@ -126,4 +126,3 @@ Contributions are welcome! Please fork this repository and submit a pull request
 ---
 
 *Crafted with ❤️ by Vaibhavsingh Mohane*
-```
