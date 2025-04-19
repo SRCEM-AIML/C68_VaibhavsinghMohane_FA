@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/SRCEM-AIML/C68_VaibhavsinghMohane_FA.git'
+                git branch: 'main', url: 'https://github.com/SRCEM-AIML/C68_VaibhavsinghMohane_FA.git'
             }
         }
 
